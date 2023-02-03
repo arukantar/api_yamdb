@@ -3,7 +3,7 @@ from django.core import validators
 
 
 class Category(models.Model):
-    """Класс категорий"""
+    """Класс категорий."""
     name = models.CharField('Название', max_length=256)
     slug = models.SlugField(
         'Cлаг',
