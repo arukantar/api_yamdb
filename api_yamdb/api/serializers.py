@@ -1,16 +1,12 @@
-<<<<<<< HEAD
-from reviews.models import Category
 from rest_framework import serializers
+
+from reviews.models import User, Category
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('name', 'slug')
-=======
-from rest_framework import serializers
-
-from reviews.models import User
 
 
 class SignupSerializer(serializers.ModelSerializer):
@@ -34,4 +30,3 @@ class UserSerializer(serializers.ModelSerializer):
             'username', 'email', 'first_name', 'last_name', 'bio', 'role',
         )
         model = User
->>>>>>> feature/register_and_auth
