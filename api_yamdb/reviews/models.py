@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+from api.constants import CONFIRMATION_CODE_LENGTH
+
 
 class User(AbstractUser):
     email = models.EmailField(
@@ -16,6 +18,6 @@ class User(AbstractUser):
         default='user',
     )
     confirmation_code = models.CharField(
-        max_length=8,
+        max_length=CONFIRMATION_CODE_LENGTH,
         blank=True,
     )
