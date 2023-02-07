@@ -29,8 +29,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         if request.method == 'POST' and Review.objects.filter(
             title=title, author=author
         ).exists():
-            raise serializers.ValidationError('Вы уже оставили свой отзыв'
-                                              'к этому произведению!')
+            raise serializers.ValidationError('Комментарий уже оставлен!')
         return data
 
     class Meta:
