@@ -4,6 +4,12 @@ from django.contrib.auth.models import AbstractUser
 
 from api.constants import CONFIRMATION_CODE_LENGTH
 
+ROLES = (
+    ('admin', 'Администратор'),
+    ('moderator', 'Модератор'),
+    ('user', 'Пользователь')
+)
+
 
 class User(AbstractUser):
     email = models.EmailField(
@@ -16,12 +22,19 @@ class User(AbstractUser):
     )
     role = models.CharField(
         max_length=20,
+        choices=ROLES,
         default='user',
     )
     confirmation_code = models.CharField(
         max_length=CONFIRMATION_CODE_LENGTH,
         blank=True,
     )
+
+    @property
+    def is_admin(self):
+        return self.role == (
+            'admin' or self.is_superuser or self.is_staff
+        )
 
 
 class Category(models.Model):

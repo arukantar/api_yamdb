@@ -3,6 +3,11 @@ from rest_framework import serializers
 from reviews.models import User, Category
 
 
+class TokenSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    confirmation_code = serializers.CharField(required=True)
+
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -23,6 +28,15 @@ class SignupSerializer(serializers.ModelSerializer):
         return value
 
 
+class AdminUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        fields = (
+            'username', 'email', 'first_name', 'last_name', 'bio', 'role',
+        )
+        model = User
+
+
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -30,3 +44,4 @@ class UserSerializer(serializers.ModelSerializer):
             'username', 'email', 'first_name', 'last_name', 'bio', 'role',
         )
         model = User
+        read_only_fields = ('role',)
