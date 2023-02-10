@@ -10,13 +10,15 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.filters import SearchFilter
 
-from reviews.models import User, Category
+from reviews.models import User, Category, Genre
 from .serializers import (
     SignupSerializer,
     UserSerializer,
     AdminUserSerializer,
     CategorySerializer,
-    TokenSerializer
+    TokenSerializer,
+    GenreSerializer
+
 )
 from .constants import CONFIRMATION_CODE_LENGTH
 from .permissions import AdminOnly
@@ -54,6 +56,20 @@ class CategoryViewSet(
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+class GenreViewSet(
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet
+):
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+    lookup_field = 'slug'
+
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
 
 
 @api_view(['POST'])

@@ -126,3 +126,25 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Оценка {self.author.username} на {self.review.title.name}'
+
+
+class Genre(models.Model):
+    """Класс жанров."""
+
+    name = models.CharField('Название', max_length=256)
+    slug = models.SlugField(
+        'Cлаг',
+        max_length=50,
+        unique=True,
+        validators=[validators.RegexValidator(
+            regex=r'^[-a-zA-Z0-9_]+$',
+            message='Слаг содержит недопустимые символы'
+        )]
+    )
+
+    class Meta:
+        verbose_name = 'Жанр'
+        verbose_name_plural = 'Жанры'
+
+    def __str__(self):
+        return self.name
