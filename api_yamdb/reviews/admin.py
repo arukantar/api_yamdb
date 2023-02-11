@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import User, Category, Comment, Review
 
+
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('pk', 'text', 'score', 'title', 'author', 'pub_date', )
     search_fields = ('text', 'author', )

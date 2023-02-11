@@ -60,6 +60,55 @@ class Category(models.Model):
         return self.name
 
 
+class Genre(models.Model):
+    """Класс жанров."""
+
+    name = models.CharField('Название', max_length=256)
+    slug = models.SlugField(
+        'Cлаг',
+        max_length=50,
+        unique=True,
+        validators=[validators.RegexValidator(
+            regex=r'^[-a-zA-Z0-9_]+$',
+            message='Слаг содержит недопустимые символы'
+        )]
+    )
+
+    class Meta:
+        verbose_name = 'Жанр'
+        verbose_name_plural = 'Жанры'
+
+    def __str__(self):
+        return self.name
+
+
+class Title(models.Model):
+    """Класс произведений."""
+    name = models.CharField('Название', max_length=256)
+    year = models.IntegerField('Год выпуска')
+    description = models.TextField('Описание', blank=True, null=True)
+    category = models.ForeignKey(
+        Category,
+        verbose_name='Slug категории',
+        related_name='titles',
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    genre = models.ManyToManyField(
+        Genre,
+        verbose_name='Slug жанра',
+        related_name='titles',
+        null=True
+    )
+
+    class Meta:
+        verbose_name = 'Произведение'
+        verbose_name_plural = 'Произведения'
+
+    def __str__(self):
+        return self.name
+
+
 class Review(models.Model):
     title = models.ForeignKey(
         to=Title,
@@ -126,25 +175,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Оценка {self.author.username} на {self.review.title.name}'
-
-
-class Genre(models.Model):
-    """Класс жанров."""
-
-    name = models.CharField('Название', max_length=256)
-    slug = models.SlugField(
-        'Cлаг',
-        max_length=50,
-        unique=True,
-        validators=[validators.RegexValidator(
-            regex=r'^[-a-zA-Z0-9_]+$',
-            message='Слаг содержит недопустимые символы'
-        )]
-    )
-
-    class Meta:
-        verbose_name = 'Жанр'
-        verbose_name_plural = 'Жанры'
-
-    def __str__(self):
-        return self.name

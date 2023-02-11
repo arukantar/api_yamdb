@@ -3,6 +3,7 @@ import string
 
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins, viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, action
@@ -11,7 +12,7 @@ from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
 
-from reviews.models import User, Category, Genre, Review
+from reviews.models import User, Category, Genre, Title, Review
 from .serializers import (
     SignupSerializer,
     UserSerializer,
@@ -19,12 +20,14 @@ from .serializers import (
     CategorySerializer,
     TokenSerializer,
     GenreSerializer,
+    TitleSerializer,
     ReviewSerializer,
     CommentSerializer
 
 )
 from .constants import CONFIRMATION_CODE_LENGTH
 from .permissions import AdminOnly
+from .filters import TitleFilter
 
 
 @api_view(['POST'])
@@ -73,6 +76,14 @@ class GenreViewSet(
 
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+
+
+class TitleViewSet(viewsets.ModelViewSet):
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TitleFilter
+
+    queryset = Title.objects.all()
+    serializer_class = TitleSerializer
 
 
 @api_view(['POST'])
@@ -141,7 +152,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
-    permission_classes = (AuthenticatedPrivilegedUsersOrReadOnly,)
+    # permission_classes = (AuthenticatedPrivilegedUsersOrReadOnly,)
     serializer_class = CommentSerializer
 
     def get_queryset(self):
@@ -157,7 +168,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 class ReviewViewSet(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
-    permission_classes = (AuthenticatedPrivilegedUsersOrReadOnly,)
+    # permission_classes = (AuthenticatedPrivilegedUsersOrReadOnly,)
     serializer_class = ReviewSerializer
 
     def perform_create(self, serializer):

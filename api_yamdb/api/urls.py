@@ -2,13 +2,14 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from . import views
-from .views import UserViewSet, CategoryViewSet, GenreViewSet
+from .views import UserViewSet, CategoryViewSet, GenreViewSet, TitleViewSet
 
 
 v1_router = DefaultRouter()
 v1_router.register(r'users', UserViewSet, basename='users')
 v1_router.register('categories', CategoryViewSet, basename='categories')
 v1_router.register('genres', GenreViewSet, basename='genres')
+v1_router.register('titles', TitleViewSet, basename='titles')
 
 urlpatterns = [
     path('v1/auth/signup/', views.signup, name='signup'),
