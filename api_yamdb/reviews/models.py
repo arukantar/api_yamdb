@@ -69,7 +69,7 @@ class Review(models.Model):
     )
     text = models.TextField(verbose_name='Текст')
     author = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE,
         related_name='reviews',
         verbose_name='Автор'
@@ -101,7 +101,7 @@ class Review(models.Model):
 class Comment(models.Model):
     text = models.TextField(verbose_name='Текст')
     author = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE,
         related_name='comments',
         verbose_name='Автор'
