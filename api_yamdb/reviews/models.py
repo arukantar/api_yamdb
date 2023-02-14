@@ -38,6 +38,12 @@ class User(AbstractUser):
             'admin' or self.is_superuser or self.is_staff
         )
 
+    @property
+    def is_moderator(self):
+        return self.role == (
+            'moderator'
+        )
+
 
 class Category(models.Model):
     """Класс категорий."""
@@ -111,14 +117,14 @@ class Title(models.Model):
 
 class Review(models.Model):
     title = models.ForeignKey(
-        to=Title,
+        Title,
         on_delete=models.CASCADE,
         related_name='reviews',
         verbose_name='Произведение'
     )
     text = models.TextField(verbose_name='Текст')
     author = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE,
         related_name='reviews',
         verbose_name='Автор'
@@ -150,7 +156,7 @@ class Review(models.Model):
 class Comment(models.Model):
     text = models.TextField(verbose_name='Текст')
     author = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL,
+        to=User,
         on_delete=models.CASCADE,
         related_name='comments',
         verbose_name='Автор'

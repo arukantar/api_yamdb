@@ -26,7 +26,12 @@ from .serializers import (
 
 )
 from .constants import CONFIRMATION_CODE_LENGTH
-from .permissions import AdminOnly
+from .permissions import (
+    AdminOnly,
+    AdminOrReadOnly,
+    PostAuthenticatedOnly,
+    AdminOrModeratorOnly
+)
 from .filters import TitleFilter
 
 
@@ -62,6 +67,7 @@ class CategoryViewSet(
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = (AdminOrReadOnly,)
 
 
 class GenreViewSet(
@@ -76,6 +82,7 @@ class GenreViewSet(
 
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+    permission_classes = (AdminOrReadOnly,)
 
 
 class TitleViewSet(viewsets.ModelViewSet):
@@ -84,6 +91,7 @@ class TitleViewSet(viewsets.ModelViewSet):
 
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
+    # permission_classes = (AdminOrReadOnly,)
 
 
 @api_view(['POST'])
@@ -152,8 +160,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
-    # permission_classes = (AuthenticatedPrivilegedUsersOrReadOnly,)
     serializer_class = CommentSerializer
+    permission_classes = (AdminOrModeratorOnly,)
 
     def get_queryset(self):
         review_id = self.kwargs.get('review_id')
@@ -164,6 +172,11 @@ class CommentViewSet(viewsets.ModelViewSet):
         review_id = self.kwargs.get('review_id')
         review = get_object_or_404(Review, id=review_id)
         serializer.save(author=self.request.user, review=review)
+
+    def get_permissions(self):
+        if self.action == 'post':
+            return ((PostAuthenticatedOnly),)
+        return super().get_permissions()
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
