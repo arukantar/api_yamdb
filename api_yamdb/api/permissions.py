@@ -1,7 +1,7 @@
-from rest_framework import permissions
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
-class AdminOnly(permissions.BasePermission):
+class AdminOnly(BasePermission):
 
     def has_permission(self, request, view):
         return (
@@ -11,49 +11,32 @@ class AdminOnly(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return (
-            request.user.is_authenticated and request.user.is_admin
-            or request.user.is_superuser
+                request.user.is_authenticated and
+                (request.user.is_admin or request.user.is_superuser)
         )
 
 
-class AdminOrReadOnly(permissions.BasePermission):
+class AdminOrReadOnly(BasePermission):
 
     def has_permission(self, request, view):
         return (
-            request.method in permissions.SAFE_METHODS
+            request.method in SAFE_METHODS
             or (request.user.is_authenticated and request.user.is_admin)
         )
 
 
-class PostAuthenticatedOnly(permissions.BasePermission):
+class AdminModeratorAuthorPermission(BasePermission):
 
     def has_permission(self, request, view):
         return (
-            request.user.is_authenticated
-        )
-
-
-class AdminOrModeratorOnly(permissions.BasePermission):
-
-    def has_permission(self, request, view):
-        return (
-            request.method in permissions.SAFE_METHODS
-            or (request.user.is_authenticated and (
-                request.user.is_admin or request.user.is_moderator
-            ))
-        )
-"""
-class AuthenticatedOrReadOnly(permissions.BasePermission):
-
-    def has_permission(self, request, view):
-        return (
-            request.user.is_authenticated
-            or request.method in permissions.SAFE_METHODS
+            request.method in SAFE_METHODS
+            or request.user.is_authenticated
         )
 
     def has_object_permission(self, request, view, obj):
         return (
-            obj.author == request.user
-            or request.method in permissions.SAFE_METHODS
+            request.method in SAFE_METHODS
+            or obj.author == request.user
+            or request.user.is_admin
+            or request.user.is_moderator
         )
-"""
