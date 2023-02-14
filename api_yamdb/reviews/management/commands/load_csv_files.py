@@ -27,10 +27,10 @@ FILE_NAMES_CLASSES = {
 }
 FIELDS = {
     'category': (Category, 'category'),
-    # 'genre_id': (Genre, 'genre'),
-    # 'title_id': (Title, 'title'),
+    'genre_id': (Genre, 'genre'),
+    'title_id': (Title, 'title'),
     'author': (User, 'author'),
-    # 'review_id': (Review, 'review'),
+    'review_id': (Review, 'review'),
 }
 
 
