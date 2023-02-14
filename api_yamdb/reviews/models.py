@@ -98,7 +98,8 @@ class Title(models.Model):
         Genre,
         verbose_name='Slug жанра',
         related_name='titles',
-        null=True
+        null=True,
+        through='TitleGenre',
     )
 
     class Meta:
@@ -107,6 +108,28 @@ class Title(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class TitleGenre(models.Model):
+    """Класс для связи жанров и произведений."""
+    title = models.ForeignKey(
+        Title,
+        verbose_name='произведение',
+        on_delete=models.CASCADE
+    )
+    genre = models.ForeignKey(
+        Genre,
+        verbose_name='Жанр',
+        on_delete=models.CASCADE
+    )
+
+    class Meta:
+        verbose_name = 'Связь жанра и произведения'
+        verbose_name_plural = 'Связи жанров и произведений'
+        ordering = ('id',)
+
+    def __str__(self):
+        return f'{self.title} связан с жанром {self.genre}'
 
 
 class Review(models.Model):
