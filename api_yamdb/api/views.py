@@ -15,10 +15,23 @@ from rest_framework_simplejwt.tokens import AccessToken
 
 from reviews.models import Category, Genre, Review, Title, User
 from .filters import TitleFilter
-from .permissions import AdminModeratorAuthorPermission, AdminOnly, AdminOrReadOnly
-from .serializers import (AdminUserSerializer, CategorySerializer, CommentSerializer,
-GenreSerializer, ReviewSerializer, SignupSerializer,
-TitleReadSerializer, TitleWriteSerializer, TokenSerializer, UserSerializer)
+from .permissions import (
+    AdminModeratorAuthorPermission,
+    AdminOnly,
+    AdminOrReadOnly
+)
+from .serializers import (
+    AdminUserSerializer,
+    CategorySerializer,
+    CommentSerializer,
+    GenreSerializer,
+    ReviewSerializer,
+    SignupSerializer,
+    TitleReadSerializer,
+    TitleWriteSerializer,
+    TokenSerializer,
+    UserSerializer
+)
 from .constants import CONFIRMATION_CODE_LENGTH
 
 

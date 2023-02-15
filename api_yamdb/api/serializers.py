@@ -110,7 +110,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
 
 
-
 class TitleReadSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     genre = GenreSerializer(
